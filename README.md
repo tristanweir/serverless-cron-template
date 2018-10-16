@@ -30,3 +30,5 @@ Including Python requirements uses the [AWS Python Requirements](https://github.
 
 
 ### Secret Manager
+
+Secrets are stored using the [AWS Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html)
