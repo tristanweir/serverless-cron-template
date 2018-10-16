@@ -1,13 +1,8 @@
 .serverless
-<<<<<<< HEAD
 *.pyc
 *.pyo
 
-package-lock.json
 .DS_Store
 
-error-notification/node_modules/
-=======
 node_modules
 package-lock.json
->>>>>>> a8a34b35c0c9d04f7c7687546c65e5411dbf6d46
