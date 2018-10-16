@@ -1,4 +1,4 @@
-service: aws-python-scheduled-cron
+service: http-obs-cron
 
 frameworkVersion: ">=1.2.0 <2.0.0"
 
@@ -17,3 +17,24 @@ functions:
     events:
       # Invoke Lambda function every 2nd minute from Mon-Fri
       - schedule: cron(0/2 * ? * MON-FRI *)
+
+
+
+resources:
+  Resources:
+    S3BucketObservatoryResults:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: observatory-results
+    CronLambdaPermissionObservatoryResultsS3:
+      Type: "AWS::Lambda::Permission"
+      Properties:
+        FunctionName:
+          "Fn::GetAtt":
+          - CronLambdaFunction
+          - Arn
+        Principal: "s3.amazonaws.com"
+        Action: "lambda:InvokeFunction"
+        SourceAccount:
+          Ref: AWS::AccountId
+        SourceArn: "arn:aws:s3:::observatory-results"
