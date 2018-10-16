@@ -1,4 +1,4 @@
-service: aws-python-scheduled-cron
+service: http-observatory-cron
 
 frameworkVersion: ">=1.2.0 <2.0.0"
 
@@ -17,6 +17,26 @@ functions:
       - functionErrors
       - HTTPObsDownAlarm
       - functionThrottles
+
+resources:
+  Resources:
+    S3BucketObservatoryResults:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: observatory-results-2
+    CronLambdaPermissionObservatoryResultsS3:
+      Type: "AWS::Lambda::Permission"
+      Properties:
+        FunctionName:
+          "Fn::GetAtt":
+          - CronLambdaFunction
+          - Arn
+        Principal: "s3.amazonaws.com"
+        Action: "lambda:InvokeFunction"
+        SourceAccount:
+          Ref: AWS::AccountId
+        SourceArn: "arn:aws:s3:::observatory-results-2"
+
 
 plugins:
   - serverless-plugin-aws-alerts
