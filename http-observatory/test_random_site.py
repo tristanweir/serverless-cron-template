@@ -6,7 +6,7 @@ random_site = Randomizer(url)
 
 class TestRandomizer():
     def test_randomizer_string(self):
-        assert isinstance(random_site.next(), basestring)
+        assert isinstance(random_site.next(), str)
 
     def test_randomizer_fqdn(self):
         assert "." in random_site.next()
