@@ -6,12 +6,18 @@ provider:
   name: aws
   runtime: python3.6
   region: us-west-2
-  # iamRoleStatements:
-  #  - Effect: Allow
-  #    Action:
-  #      - s3:PutObject
-  #      - s3:PutObjectAcl
-  #    Resource: “arn:aws:s3:::observatory-results-2/*”
+  iamRoleStatements:
+   - Effect: "Allow"
+     Action:
+       - "s3:PutObject"
+       - "s3:PutObjectAcl"
+     Resource: 
+      Fn::Join:
+        - ""
+        - - Fn::GetAtt:
+            - S3BucketObservatoryResults
+            - Arn
+          - "/*"
 
 functions:
   cron:
@@ -19,6 +25,9 @@ functions:
     events:
       # Invoke Lambda function every minute
       - schedule: rate(1 minute)
+      - s3:
+        bucket: ${self:custom.cfg.s3BucketName}
+        event: s3:ObjectCreated:*
     alarms: 
       - functionErrors
       - HTTPObsDownAlarm
@@ -26,23 +35,10 @@ functions:
 
 resources:
   Resources:
-    # S3BucketObservatoryResults:
-    #   Type: AWS::S3::Bucket
-    #   Properties:
-    #     BucketName: observatory-results-2
-    CronLambdaPermissionObservatoryResultsS3:
-      Type: "AWS::Lambda::Permission"
+    S3BucketObservatoryResults:
+      Type: AWS::S3::Bucket
       Properties:
-        FunctionName:
-          "Fn::GetAtt":
-          - CronLambdaFunction
-          - Arn
-        Principal: "s3.amazonaws.com"
-        Action: "lambda:InvokeFunction"
-        SourceAccount:
-          Ref: AWS::AccountId
-        SourceArn: "arn:aws:s3:::observatory-results-2"
-
+        BucketName: ${self:custom.cfg.s3BucketName}
 
 plugins:
   - serverless-plugin-aws-alerts
@@ -78,3 +74,5 @@ custom:
       - functionErrors
       - functionThrottles
       - HTTPObsDownAlarm
+  cfg:
+    s3BucketName: "observatoryresults"
