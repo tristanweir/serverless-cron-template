@@ -1,0 +1,8 @@
+.serverless
+*.pyc
+*.pyo
+
+package-lock.json
+.DS_Store
+
+error-notification/node_modules/
