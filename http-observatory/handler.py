@@ -1,6 +1,5 @@
 import datetime
 import logging
-import s3_helper
 
 from s3_helper import send_to_s3
 
