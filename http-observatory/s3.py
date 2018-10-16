@@ -2,22 +2,19 @@ import boto
 import boto.s3
 import os
 import sys
+import os.path
 
 
 def send_to_s3(file_path):
     """
     Upload a file to a given s3 bucket
     """
-    file = open(file_path)
-    key_name = file.name
+    key_name = os.path.basename(file_path)
 
     param_store = AWSParameterstoreProvider()
-    access_key_id = param_store.key('TBD')
-    secret_access_key = param_store.key('TBD')
     bucket_name = param_store.key('observatory-s3-bucket')
 
-    conn = boto.connect_s3(aws_access_key_id=access_key_id,
-                           aws_secret_access_key=secret_access_key)
+    conn = boto.connect_s3()
     bucket = conn.get_bucket(bucket_name, validate=False)
     key = boto.s3.key.Key(bucket)
     key.key = key_name
