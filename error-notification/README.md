@@ -11,3 +11,4 @@ It uses an existing plugin created by "ACloudGuru" [serverless-plugin-aws-alerts
 
 This very simple example triggers an exception in the "handler" function run by cron - A "ZeroDivisionError: division by zero" in order to trigger an "alert". The alert itself is defined in `serverless.yml` file, by creating an SNS topic.
 
+## Example
