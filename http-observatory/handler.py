@@ -6,11 +6,10 @@ logger.setLevel(logging.INFO)
 
 import s3_helper
 
+
 def run(event, context):
     # Test out S3 upload capability
-    filename = 'test.txt'
+    scan_result = "test"
+    hostname = "www.mozilla.org"
 
-    with open(filename, 'w') as file:
-        file.write('test')
-
-    send_to_s3(filename)
+    send_to_s3(hostname, scan_result)
