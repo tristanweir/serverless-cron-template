@@ -31,10 +31,3 @@ class ObservatoryScanner():
             time.sleep(self.sleep_interval)
             count += 1
         raise Exception("Unable to get results within 60 seconds")
-
-
-### How to use me? ###
-url = "mozilla.org"
-scanner = ObservatoryScanner()
-results = scanner.scan(url)
-######################
