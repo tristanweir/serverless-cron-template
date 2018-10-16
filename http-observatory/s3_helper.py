@@ -1,6 +1,7 @@
 import boto3
 import json
 import os
+import logging
 
 client = boto3.client('s3')
 

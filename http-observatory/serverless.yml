@@ -44,8 +44,6 @@ plugins:
   - serverless-plugin-aws-alerts
   - serverless-python-requirements
 
-# This part is specific for HTTP Observatory Runner project
-
 custom:
   alerts:
     # stages:
@@ -78,5 +76,4 @@ custom:
   cfg:
     s3BucketName: "observatoryresults"
   pythonRequirements:
-    # stages:
     dockerizePip: non-linux
