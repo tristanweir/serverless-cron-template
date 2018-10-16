@@ -1,13 +1,14 @@
 import datetime
 import logging
 
+from s3_helper import send_to_s3
+
 from observatory_scanner import ObservatoryScanner
 from randomizer import Randomizer
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-import s3_helper
 
 
 def run(event, context):

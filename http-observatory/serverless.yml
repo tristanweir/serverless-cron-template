@@ -6,6 +6,18 @@ provider:
   name: aws
   runtime: python3.6
   region: us-west-2
+  iamRoleStatements:
+   - Effect: "Allow"
+     Action:
+       - "s3:PutObject"
+       - "s3:PutObjectAcl"
+     Resource: 
+      Fn::Join:
+        - ""
+        - - Fn::GetAtt:
+            - S3BucketObservatoryResults
+            - Arn
+          - "/*"
 
 functions:
   cron:
@@ -13,69 +25,55 @@ functions:
     events:
       # Invoke Lambda function every minute
       - schedule: rate(1 minute)
-    # alarms: 
-    #   - functionErrors
-    #   - HTTPObsDownAlarm
-    #   - functionThrottles
+      - s3:
+        bucket: ${self:custom.cfg.s3BucketName}
+        event: s3:ObjectCreated:*
+    alarms: 
+      - functionErrors
+      - HTTPObsDownAlarm
+      - functionThrottles
 
-# resources:
-#   Resources:
-#     S3BucketObservatoryResults:
-#       Type: AWS::S3::Bucket
-#       Properties:
-#         BucketName: observatory-results-2
-#     CronLambdaPermissionObservatoryResultsS3:
-#       Type: "AWS::Lambda::Permission"
-#       Properties:
-#         FunctionName:
-#           "Fn::GetAtt":
-#           - CronLambdaFunction
-#           - Arn
-#         Principal: "s3.amazonaws.com"
-#         Action: "lambda:InvokeFunction"
-#         SourceAccount:
-#           Ref: AWS::AccountId
-#         SourceArn: "arn:aws:s3:::observatory-results-2"
+resources:
+  Resources:
+    S3BucketObservatoryResults:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.cfg.s3BucketName}
 
-
-# plugins:
-#   - serverless-plugin-aws-alerts
-
-# This part is specific for HTTP Observatory Runner project
-
-# custom:
-#   alerts:
-#     # stages:
-#       # - production
-#       # - dev
-#     topics:
-#       alarm:
-#         topic: ${self:service}-httpobs-exception-alarm
-#         notifications:
-#           - protocol: email
-#             endpoint: culucenk@mozilla.com # Change this to your email address
-#     definitions:
-#       HTTPObsDownAlarm:
-#         description: 'HTTP Observatory is down'
-#         namespace: 'AWS/Lambda'
-#         metric: HTTPObsDownException
-#         threshold: 0
-#         statistic: Minimum
-#         period: 60
-#         evaluationPeriods: 1
-#         comparisonOperator: GreaterThanThreshold
-#         # This will catch if lambdas are logging in JSON format, like: {"level":"ERROR","message":"some message"}
-#         pattern: '{ $.level = "ERROR" }'
-#         # For this to work, we need to create a custom CloudWatch metric 
-#         # pattern: 'HTTPObs exception'
-#     alarms:
-#       - functionErrors
-#       - functionThrottles
-#       - HTTPObsDownAlarm
-# This tells serverless to create a Docker container that
-# builds the Python modules in requirements.txt
 plugins:
+  - serverless-plugin-aws-alerts
   - serverless-python-requirements
+
 custom:
+  alerts:
+    # stages:
+      # - production
+      # - dev
+    topics:
+      alarm:
+        topic: ${self:service}-httpobs-exception-alarm
+        notifications:
+          - protocol: email
+            endpoint: culucenk@mozilla.com # Change this to your email address
+    definitions:
+      HTTPObsDownAlarm:
+        description: 'HTTP Observatory is down'
+        namespace: 'AWS/Lambda'
+        metric: HTTPObsDownException
+        threshold: 0
+        statistic: Minimum
+        period: 60
+        evaluationPeriods: 1
+        comparisonOperator: GreaterThanThreshold
+        # This will catch if lambdas are logging in JSON format, like: {"level":"ERROR","message":"some message"}
+        pattern: '{ $.level = "ERROR" }'
+        # For this to work, we need to create a custom CloudWatch metric 
+        # pattern: 'HTTPObs exception'
+    alarms:
+      - functionErrors
+      - functionThrottles
+      - HTTPObsDownAlarm
+  cfg:
+    s3BucketName: "observatoryresults"
   pythonRequirements:
     dockerizePip: non-linux
