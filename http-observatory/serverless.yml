@@ -1,4 +1,4 @@
-service: aws-python-scheduled-cron
+service: http-obs-cron
 
 frameworkVersion: ">=1.2.0 <2.0.0"
 
@@ -19,18 +19,19 @@ functions:
       - schedule: cron(0/2 * ? * MON-FRI *)
 
 
+
 resources:
   Resources:
     S3BucketObservatoryResults:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: observatory-results
-    HTTPObservatoryPermissionResultsS3:
+    CronLambdaPermissionObservatoryResultsS3:
       Type: "AWS::Lambda::Permission"
       Properties:
         FunctionName:
-          "Fn::PutObject"
-          - HTTPObservatory
+          "Fn::GetAtt":
+          - CronLambdaFunction
           - Arn
         Principal: "s3.amazonaws.com"
         Action: "lambda:InvokeFunction"
