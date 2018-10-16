@@ -14,6 +14,12 @@ Serverless Security Automation provides a feature-rich serverless framework for 
 ## Deploy your first serverless instance
 `$ serverless deploy`
 
+> Note: if you are using IAM Roles with MFA, you may need to export your AWS environment variables using the [assume-role](https://github.com/remind101/assume-role/) package
+
+>For example, `$ brew install remind101/formulae/assume-role` on Mac
+
+>Then launch with `$ assume-role YOUR_ROLE && serverless deploy` where YOUR_ROLE is defined in your /.aws/config file
+
 ## Features
 
 ### Error Handling
