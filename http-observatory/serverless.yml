@@ -5,6 +5,7 @@ frameworkVersion: ">=1.2.0 <2.0.0"
 provider:
   name: aws
   runtime: python3.6
+  region: us-west-2
 
 functions:
   cron:
@@ -12,13 +13,10 @@ functions:
     events:
       # Invoke Lambda function every minute
       - schedule: rate(1 minute)
-  # secondCron:
-  #   handler: handler.run
-  #   events:
-  #     # Invoke Lambda function every 2nd minute from Mon-Fri
-  #     - schedule: cron(0/2 * ? * MON-FRI *)
-
-
+    alarms: 
+      - functionErrors
+      - HTTPObsDownAlarm
+      - functionThrottles
 
 resources:
   Resources:
@@ -38,3 +36,39 @@ resources:
         SourceAccount:
           Ref: AWS::AccountId
         SourceArn: "arn:aws:s3:::observatory-results-2"
+
+
+plugins:
+  - serverless-plugin-aws-alerts
+
+# This part is specific for HTTP Observatory Runner project
+
+custom:
+  alerts:
+    # stages:
+      # - production
+      # - dev
+    topics:
+      alarm:
+        topic: ${self:service}-httpobs-exception-alarm
+        notifications:
+          - protocol: email
+            endpoint: culucenk@mozilla.com # Change this to your email address
+    definitions:
+      HTTPObsDownAlarm:
+        description: 'HTTP Observatory is down'
+        namespace: 'AWS/Lambda'
+        metric: HTTPObsDownException
+        threshold: 0
+        statistic: Minimum
+        period: 60
+        evaluationPeriods: 1
+        comparisonOperator: GreaterThanThreshold
+        # This will catch if lambdas are logging in JSON format, like: {"level":"ERROR","message":"some message"}
+        pattern: '{ $.level = "ERROR" }'
+        # For this to work, we need to create a custom CloudWatch metric 
+        # pattern: 'HTTPObs exception'
+    alarms:
+      - functionErrors
+      - functionThrottles
+      - HTTPObsDownAlarm
