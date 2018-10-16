@@ -4,8 +4,14 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+from s3_helper import send_to_s3
+
 
 def run(event, context):
-    current_time = datetime.datetime.now().time()
-    name = context.function_name
-    logger.info("Your cron function " + name + " ran at " + str(current_time))
+    # Test out S3 upload capability
+    filename = 'test.txt'
+
+    with open(filename, 'w') as file:
+        file.write('test')
+
+    send_to_s3(filename)
