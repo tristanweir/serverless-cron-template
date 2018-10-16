@@ -9,16 +9,16 @@ Serverless Security Automation provides a feature-rich serverless framework for 
 
 [Install Serverless](https://serverless.com/framework/docs/providers/aws/guide/installation/)
 
-`$ npm install -g serverless`
+`npm install -g serverless`
 
 ## Deploy your first serverless instance
-`$ serverless deploy`
+`serverless deploy`
 
 > Note: if you are using IAM Roles with MFA, you may need to export your AWS environment variables using the [assume-role](https://github.com/remind101/assume-role/) package
 
->For example, `$ brew install remind101/formulae/assume-role` on Mac
+>For example, `brew install remind101/formulae/assume-role` on Mac
 
->Then launch with `$ assume-role YOUR_ROLE && serverless deploy` where YOUR_ROLE is defined in your /.aws/config file
+>Then launch with `assume-role YOUR_ROLE && serverless deploy` where YOUR_ROLE is defined in your /.aws/config file
 
 ## Features
 
@@ -26,13 +26,13 @@ Serverless Security Automation provides a feature-rich serverless framework for 
 
 Error Handling uses the [Serverless Plugin AWS Alerts](https://github.com/ACloudGuru/serverless-plugin-aws-alerts) plugin. 
 
-`$ npm i serverless-plugin-aws-alerts`
+`npm i serverless-plugin-aws-alerts`
 
 ### Python Requirements
 
 Including Python requirements uses the [AWS Python Requirements](https://github.com/UnitedIncome/serverless-python-requirements) plugin. This also requires [Docker](https://www.docker.com/get-started) to be installed.
 
-`$ sls plugin install -n serverless-python-requirements`
+`sls plugin install -n serverless-python-requirements`
 
 
 ### Secret Manager
