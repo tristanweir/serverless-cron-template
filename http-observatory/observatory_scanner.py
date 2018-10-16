@@ -3,8 +3,9 @@ import time
 
 
 class ObservatoryScanner():
-    def __init__(self):
+    def __init__(self, sleep_interval=1):
         self.session = requests.Session()
+        self.sleep_interval = sleep_interval
         self.api_url = 'https://http-observatory.security.mozilla.org/api/v1'
 
     def scan(self, host):
@@ -20,13 +21,16 @@ class ObservatoryScanner():
 
     def __poll(self, scan_id):
         url = self.api_url + '/getScanResults?scan=' + str(scan_id)
-        while True:
+        count = 0
+        while count < 60:
             resp = self.session.get(url).json()
             # This means we got our results back, so return them!
             if 'content-security-policy' in resp:
                 return resp
 
-            time.sleep(1)
+            time.sleep(self.sleep_interval)
+            count += 1
+        raise Exception("Unable to get results within 60 seconds")
 
 
 ### How to use me? ###
