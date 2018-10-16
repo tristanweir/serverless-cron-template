@@ -34,7 +34,7 @@ custom:
         topic: ${self:service}-alerts-alarm
         notifications:
           - protocol: email
-            endpoint: culucenk@mozilla.com # Change this to your email address
+            endpoint: test@example.com # Change this to your email address
     alarms:
       - functionErrors
       - functionThrottles
