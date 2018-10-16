@@ -1,7 +1,7 @@
 import datetime
 import logging
-import requests  # this is an example of an import
 import ldap
+import requests  # this is an example of an import
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
