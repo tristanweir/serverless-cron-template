@@ -17,3 +17,23 @@ functions:
     events:
       # Invoke Lambda function every 2nd minute from Mon-Fri
       - schedule: cron(0/2 * ? * MON-FRI *)
+
+
+resources:
+  Resources:
+    S3BucketObservatoryResults:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: observatory-results
+    HTTPObservatoryPermissionResultsS3:
+      Type: "AWS::Lambda::Permission"
+      Properties:
+        FunctionName:
+          "Fn::PutObject"
+          - HTTPObservatory
+          - Arn
+        Principal: "s3.amazonaws.com"
+        Action: "lambda:InvokeFunction"
+        SourceAccount:
+          Ref: AWS::AccountId
+        SourceArn: "arn:aws:s3:::observatory-results"
