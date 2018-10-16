@@ -1,4 +1,4 @@
-service: http-obs-cron
+service: tweir-http-obs-cron
 
 frameworkVersion: ">=1.2.0 <2.0.0"
 
@@ -12,11 +12,11 @@ functions:
     events:
       # Invoke Lambda function every minute
       - schedule: rate(1 minute)
-  secondCron:
-    handler: handler.run
-    events:
-      # Invoke Lambda function every 2nd minute from Mon-Fri
-      - schedule: cron(0/2 * ? * MON-FRI *)
+  # secondCron:
+  #   handler: handler.run
+  #   events:
+  #     # Invoke Lambda function every 2nd minute from Mon-Fri
+  #     - schedule: cron(0/2 * ? * MON-FRI *)
 
 
 
@@ -25,7 +25,7 @@ resources:
     S3BucketObservatoryResults:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: observatory-results
+        BucketName: observatory-results-1
     CronLambdaPermissionObservatoryResultsS3:
       Type: "AWS::Lambda::Permission"
       Properties:
@@ -37,4 +37,4 @@ resources:
         Action: "lambda:InvokeFunction"
         SourceAccount:
           Ref: AWS::AccountId
-        SourceArn: "arn:aws:s3:::observatory-results"
+        SourceArn: "arn:aws:s3:::observatory-results-1"

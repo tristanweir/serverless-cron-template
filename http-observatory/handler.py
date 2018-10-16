@@ -4,8 +4,7 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-from s3_helper import send_to_s3
-
+import s3_helper
 
 def run(event, context):
     # Test out S3 upload capability
