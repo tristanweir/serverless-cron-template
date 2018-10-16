@@ -6,7 +6,7 @@ client = boto3.client('s3')
 
 
 def send_to_s3(hostname, scan_json):
-    key = "{0}.{1}".format(hostname, "json")
+    key = "{}.{}".format(hostname, "json")
     bucket = 'observatory-results-1'
     client.put_object(Body=scan_json, Bucket=bucket,
                       Key=key, ACL='public-read')
