@@ -33,8 +33,8 @@ def send_to_s3(file_path):
     # param_store = AWSParameterstoreProvider()
     # bucket = param_store.key('observatory-s3-bucket')
 
-    bucket="observatory-results-1"
-
+    bucket='bservatory-results-1'
+    
     try:
         data = s3.put_object(Bucket=bucket, Key=key, ACL='public-read')
 
