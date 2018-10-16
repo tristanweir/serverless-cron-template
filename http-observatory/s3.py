@@ -12,9 +12,9 @@ def send_to_s3(file_path):
     key_name = file.name
 
     param_store = AWSParameterstoreProvider()
-    access_key_id = param_store.key('s3_aws_access_key_id')
-    secret_access_key = param_store.key('s3_aws_secret_access_key')
-    bucket_name = param_store.key('s3_bucket_name')
+    access_key_id = param_store.key('TBD')
+    secret_access_key = param_store.key('TBD')
+    bucket_name = param_store.key('observatory-s3-bucket')
 
     conn = boto.connect_s3(aws_access_key_id=access_key_id,
                            aws_secret_access_key=secret_access_key)
